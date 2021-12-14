@@ -12,6 +12,7 @@ type IpHolder struct {
 
 func (holder *IpHolder) AddIp(new_ip string) {
 	holder.mu.Lock()
+	defer holder.mu.Unlock()
 
 	result := true
 	for _, ip := range holder.Ips {
@@ -25,10 +26,11 @@ func (holder *IpHolder) AddIp(new_ip string) {
 		holder.Ips = append(holder.Ips, new_ip)
 		log.Printf("Added ip %s to ipHolder", new_ip)
 	}
-
-	holder.mu.Unlock()
 }
 
 func (holder *IpHolder) GetVisitors() int {
+	holder.mu.Lock()
+	defer holder.mu.Unlock()
+
 	return len(holder.Ips)
 }
