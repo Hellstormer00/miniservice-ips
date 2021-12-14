@@ -12,7 +12,7 @@ type logRequest struct {
 	Url       string `json:"url"`
 }
 
-func HandleLogRequest(ch chan string, ipHolder *IpHolder) http.HandlerFunc {
+func HandleLogRequest(ipHolder *IpHolder) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Println("New request:", r.Method, r.URL)
 
@@ -36,11 +36,14 @@ func HandleLogRequest(ch chan string, ipHolder *IpHolder) http.HandlerFunc {
 	}
 }
 
-func HandleVisitorRequest(w http.ResponseWriter, r *http.Request) {
-	log.Println("New request:", r.Method, r.URL)
+func HandleVisitorRequest(ipHolder *IpHolder) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		log.Println("New request:", r.Method, r.URL)
 
-	if r.Method != http.MethodGet {
-		http.Error(w, "This API only uses GET", 400)
+		if r.Method != http.MethodGet {
+			http.Error(w, "This API only uses GET", 400)
+		}
+
+		log.Printf("Sending Response: %d ips", ipHolder.GetVisitors())
 	}
-
 }

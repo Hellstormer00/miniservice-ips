@@ -11,11 +11,10 @@ const (
 )
 
 func main() {
-	ch := make(chan string, 10)
 	ipHolder := pkg.IpHolder{
 		Ips: make([]string, 0, bufsize),
 	}
-	http.HandleFunc("/logs", pkg.HandleLogRequest(ch, &ipHolder))
-	http.HandleFunc("/visitors", pkg.HandleVisitorRequest)
+	http.HandleFunc("/logs", pkg.HandleLogRequest(&ipHolder))
+	http.HandleFunc("/visitors", pkg.HandleVisitorRequest(&ipHolder))
 	http.ListenAndServe(":5000", nil)
 }
