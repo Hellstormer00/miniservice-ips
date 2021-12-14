@@ -11,9 +11,7 @@ const (
 )
 
 func main() {
-	ipHolder := pkg.IpHolder{
-		Ips: make([]string, 0, bufsize),
-	}
+	ipHolder := pkg.NewIpHolder(bufsize)
 	http.HandleFunc("/logs", pkg.HandleLogRequest(&ipHolder))
 	http.HandleFunc("/visitors", pkg.HandleVisitorRequest(&ipHolder))
 	http.ListenAndServe(":5000", nil)
