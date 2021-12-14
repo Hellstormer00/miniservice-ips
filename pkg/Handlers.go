@@ -12,7 +12,7 @@ type logRequest struct {
 	Url       string `json:"url"`
 }
 
-func HandleLogRequest(ch chan string) http.HandlerFunc {
+func HandleLogRequest(ch chan string, ipHolder *IpHolder) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Println("New request:", r.Method, r.URL)
 
