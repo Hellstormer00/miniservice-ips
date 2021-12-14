@@ -1,6 +1,9 @@
 package pkg
 
-import "sync"
+import (
+	"log"
+	"sync"
+)
 
 type IpHolder struct {
 	mu  sync.Mutex
@@ -10,17 +13,20 @@ type IpHolder struct {
 func (holder *IpHolder) AddIp(new_ip string) {
 	holder.mu.Lock()
 
-	result := false
+	result := true
 	for _, ip := range holder.Ips {
 		if new_ip == ip {
-			result = true
+			result = false
 			break
 		}
 	}
 
 	if result {
-		holder.Ips = append(holder.Ips)
+		holder.Ips = append(holder.Ips, new_ip)
+		log.Printf("Added ip %s to ipHolder", new_ip)
 	}
+
+	log.Println(holder.Ips)
 
 	holder.mu.Unlock()
 }

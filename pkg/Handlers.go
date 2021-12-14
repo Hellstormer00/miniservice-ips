@@ -24,6 +24,7 @@ func HandleLogRequest(ch chan string, ipHolder *IpHolder) http.HandlerFunc {
 			http.Error(w, "No request body provided", 400)
 		}
 
+		log.Println("Decoding request body")
 		var req logRequest
 		err := json.NewDecoder(r.Body).Decode(&req)
 
@@ -31,6 +32,7 @@ func HandleLogRequest(ch chan string, ipHolder *IpHolder) http.HandlerFunc {
 			http.Error(w, err.Error(), 400)
 		}
 
+		ipHolder.AddIp(req.Ip)
 	}
 }
 
