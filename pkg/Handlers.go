@@ -45,5 +45,12 @@ func HandleVisitorRequest(ipHolder *IpHolder) http.HandlerFunc {
 		}
 
 		log.Printf("Sending Response: %d ips", ipHolder.GetVisitors())
+
+		b, err := json.Marshal(ipHolder.GetVisitors())
+		if err != nil {
+			http.Error(w, err.Error(), 400)
+		}
+
+		w.Write(b)
 	}
 }
