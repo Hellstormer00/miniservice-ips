@@ -26,7 +26,9 @@ func (holder *IpHolder) AddIp(new_ip string) {
 		log.Printf("Added ip %s to ipHolder", new_ip)
 	}
 
-	log.Println(holder.Ips)
-
 	holder.mu.Unlock()
+}
+
+func (holder *IpHolder) GetVisitors() int {
+	return len(holder.Ips)
 }
