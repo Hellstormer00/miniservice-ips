@@ -17,12 +17,12 @@ func HandleLogRequest(ipHolder *IpHolder) http.HandlerFunc {
 		log.Println("New request:", r.Method, r.URL)
 
 		if r.Method != http.MethodPost {
-			http.Error(w, "This API only uses POST", 400)
+			http.Error(w, "This API only uses POST", http.StatusMethodNotAllowed)
 			return
 		}
 
 		if r.Body == nil {
-			http.Error(w, "No request body provided", 400)
+			http.Error(w, "No request body provided", http.StatusBadRequest)
 			return
 		}
 
@@ -31,7 +31,7 @@ func HandleLogRequest(ipHolder *IpHolder) http.HandlerFunc {
 		err := json.NewDecoder(r.Body).Decode(&req)
 
 		if err != nil {
-			http.Error(w, err.Error(), 400)
+			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
@@ -44,7 +44,7 @@ func HandleVisitorRequest(ipHolder *IpHolder) http.HandlerFunc {
 		log.Println("New request:", r.Method, r.URL)
 
 		if r.Method != http.MethodGet {
-			http.Error(w, "This API only uses GET", 400)
+			http.Error(w, "This API only uses GET", http.StatusMethodNotAllowed)
 			return
 		}
 
@@ -52,7 +52,7 @@ func HandleVisitorRequest(ipHolder *IpHolder) http.HandlerFunc {
 
 		b, err := json.Marshal(ipHolder.GetVisitors())
 		if err != nil {
-			http.Error(w, err.Error(), 400)
+			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
