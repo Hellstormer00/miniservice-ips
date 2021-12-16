@@ -12,6 +12,7 @@ const (
 
 func main() {
 	ipHolder := pkg.NewIpHolder(bufsize)
+	go ipHolder.Serve()
 	http.HandleFunc("/logs", pkg.HandleLogRequest(&ipHolder))
 	http.HandleFunc("/visitors", pkg.HandleVisitorRequest(&ipHolder))
 	http.ListenAndServe(":5000", nil)

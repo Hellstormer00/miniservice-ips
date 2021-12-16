@@ -35,7 +35,7 @@ func HandleLogRequest(ipHolder *IpHolder) http.HandlerFunc {
 			return
 		}
 
-		ipHolder.AddIp(req.Ip)
+		ipHolder.IpChan <- req.Ip
 	}
 }
 
@@ -48,9 +48,9 @@ func HandleVisitorRequest(ipHolder *IpHolder) http.HandlerFunc {
 			return
 		}
 
-		log.Printf("Sending Response: %d ips", ipHolder.GetVisitors())
+		log.Printf("Sending Response: %d ips", <-ipHolder.VisitorChan)
 
-		b, err := json.Marshal(ipHolder.GetVisitors())
+		b, err := json.Marshal(<-ipHolder.VisitorChan)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
