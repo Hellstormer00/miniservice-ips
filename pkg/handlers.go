@@ -18,10 +18,12 @@ func HandleLogRequest(ipHolder *IpHolder) http.HandlerFunc {
 
 		if r.Method != http.MethodPost {
 			http.Error(w, "This API only uses POST", 400)
+			return
 		}
 
 		if r.Body == nil {
 			http.Error(w, "No request body provided", 400)
+			return
 		}
 
 		log.Println("Decoding request body")
@@ -30,6 +32,7 @@ func HandleLogRequest(ipHolder *IpHolder) http.HandlerFunc {
 
 		if err != nil {
 			http.Error(w, err.Error(), 400)
+			return
 		}
 
 		ipHolder.AddIp(req.Ip)
@@ -42,6 +45,7 @@ func HandleVisitorRequest(ipHolder *IpHolder) http.HandlerFunc {
 
 		if r.Method != http.MethodGet {
 			http.Error(w, "This API only uses GET", 400)
+			return
 		}
 
 		log.Printf("Sending Response: %d ips", ipHolder.GetVisitors())
@@ -49,6 +53,7 @@ func HandleVisitorRequest(ipHolder *IpHolder) http.HandlerFunc {
 		b, err := json.Marshal(ipHolder.GetVisitors())
 		if err != nil {
 			http.Error(w, err.Error(), 400)
+			return
 		}
 
 		w.Write(b)
