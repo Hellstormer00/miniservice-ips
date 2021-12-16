@@ -5,14 +5,24 @@ import (
 	"sync"
 )
 
+type hashset map[string]struct{}
+
+func (set hashset) add(key string) bool {
+	if _, ok := set[key]; !ok {
+		set[key] = struct{}{}
+		return true
+	}
+	return false
+}
+
 type IpHolder struct {
 	mu  sync.Mutex
-	ips []string
+	ips hashset
 }
 
 func NewIpHolder(bufsize int) IpHolder {
 	return IpHolder{
-		ips: make([]string, 0, bufsize),
+		ips: make(hashset),
 	}
 }
 
@@ -20,16 +30,7 @@ func (holder *IpHolder) AddIp(new_ip string) {
 	holder.mu.Lock()
 	defer holder.mu.Unlock()
 
-	result := true
-	for _, ip := range holder.ips {
-		if new_ip == ip {
-			result = false
-			break
-		}
-	}
-
-	if result {
-		holder.ips = append(holder.ips, new_ip)
+	if added := holder.ips.add(new_ip); added {
 		log.Printf("Added ip %s to ipHolder", new_ip)
 	}
 }
